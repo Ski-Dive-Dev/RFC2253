@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <AssemblyName>Rfc2253</AssemblyName>
+    <RootNamespace>Rfc2253</RootNamespace>
+    <Authors>Eric S. Li</Authors>
+    <Company></Company>
+    <Product>RFC 2253 Distinguished Name Parser and Normalizer</Product>
+    <Description>Accepts and parses strings in the format of an RFC 2253 Distinguished Name, and optionally normalizes them for direct comparison of equivalency.</Description>
+    <Copyright>2018, Eric S. Li</Copyright>
+    <PackageReleaseNotes>Released under the MIT License.</PackageReleaseNotes>
+  </PropertyGroup>
+
+</Project>
