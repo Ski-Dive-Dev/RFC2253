@@ -29,6 +29,10 @@ namespace Rfc2253
         protected RdnValue() { /* Disable default constructor for public use. */ }
         protected RdnValue(string value) => Value = value;
 
+
+        /// <summary>
+        /// Instantiates and returns an <see cref="RdnValue"/> object.
+        /// </summary>
         public static IAttributeComponent Create(string rdnValue, bool isQuoted = false, bool isHexString = false,
             bool isCaseSensitive = true, IRelativeDistinguishedName[] multiValues = null)
         {
@@ -59,8 +63,9 @@ namespace Rfc2253
                     normalizedString.Append(rdnComponentDelimiter);
                 }
 
-                var positionOfLastAddedDelimiter = normalizedString.Length - 1;
-                normalizedString.Remove(positionOfLastAddedDelimiter, length: 1);
+                const int lengthOfRdnComponentDelimiter = 1;
+                var positionOfLastAddedDelimiter = normalizedString.Length - lengthOfRdnComponentDelimiter;
+                normalizedString.Remove(positionOfLastAddedDelimiter, lengthOfRdnComponentDelimiter);
 
                 if (convertToNormalized)
                 {
@@ -71,26 +76,16 @@ namespace Rfc2253
             }
             catch (Exception ex)
             {
-                var message = $"An error occurred while normalizing an RDN Multi-Value, {Value}.";
+                var message = $"An error occurred while normalizing a Relative Distinguished Name Multi-Value," +
+                    $" {Value}.";
                 throw new Exception(message, ex);
             }
         }
 
 
         /// <summary>
-        /// Returns the RDN value as a normalized string, but does not normalize the internal data structure.
-        /// </summary>
-        public override string GetAsNormalized() => GetAsNormalized(convertToNormalized: false);
-
-
-        /// <summary>
-        /// Normalizes the internal data structure of the RDN value.
-        /// </summary>
-        public override void Normalize() => GetAsNormalized(convertToNormalized: true);
-
-
-        /// <summary>
-        /// Gets the RDN value as a normalized string and optionally normalizes the data structure.
+        /// Gets the Relative Distinguished Name value as a normalized string and optionally normalizes the data
+        /// structure.
         /// </summary>
         public override string GetAsNormalized(bool convertToNormalized)
         {
@@ -103,6 +98,7 @@ namespace Rfc2253
                 }
                 else if (IsHexString)
                 {
+                    // Current pre-processor will only discover a hex string that is prefixed, but you never know..
                     normalizedValue = Value[0] == '#'
                         ? Value
                         : "#" + Value;                                          // Ensure Hex String is Prefixed
@@ -238,7 +234,7 @@ namespace Rfc2253
 
 
         /// <summary>
-        /// Assuming 7-bit ASCII, returns <see langword=""="true"/> if given ASCII value is non-printable.  Does
+        /// Assuming 7-bit ASCII, returns <see langword="true"/> if given ASCII value is non-printable.  Does
         /// not consider RFC 2253 "special" characters as requiring escaping.
         /// </summary>
         protected virtual bool IsNonPrintableAscii(byte asciiValue) =>
@@ -249,7 +245,8 @@ namespace Rfc2253
         /// Returns <see langword="true"/> if the given ASCII value represents one of the seven "special"
         /// characters defined in RFC 2253.
         /// </summary>
-        protected virtual bool IsRfc2253SpecialChar(byte asciiValue) => asciiCodesForSpecialChars.Contains(asciiValue);
+        protected virtual bool IsRfc2253SpecialChar(byte asciiValue) => 
+            asciiCodesForSpecialChars.Contains(asciiValue);
 
 
         /// <summary>
