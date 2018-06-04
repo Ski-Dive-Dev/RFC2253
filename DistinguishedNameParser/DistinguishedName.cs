@@ -24,13 +24,15 @@ namespace Rfc2253
         private const string hexPair = hexChar + hexChar;
         private static readonly string hexString = $@"(?:{hexPair})+";
         private const string special = @",=+<>#;";
+
         private static readonly string pair = $@"{backslash}([{special}{backslash}{quotation}]|{hexPair})";
         // yields: \\([,=+<>#;\\"]|([0-9A-Fa-f][0-9A-Fa-f]))
         // correctly parses: abc,\,,==\==++\++<<\<<>>\\x>>\>>""\""\55ab"\abb\AF\AX\\a
+
         private static readonly string stringChar = $@"[^{special}{backslash}{quotation}]";
         private static readonly string quoteChar = $@"[^{backslash}{quotation}]";
 
-        // Reorganized from RFC since the Regex parser is "greedy":
+        // Reorganized from the RFC since the Regex parser is "greedy":
         private static readonly string stringRegexPattern =
             $@"(?<hexString>{octothorpe}{hexString})" +
             $@"|{quotation}(?<quoted>(?:{quoteChar}|{pair})*){quotation}" +     // Quoted only from LDAPv2
@@ -44,7 +46,8 @@ namespace Rfc2253
 
         // There seems to be an error in RFC 2253 - it describes at least one keychar (1*keychar) follows ALPHA.
         // Requiring at least two characters for the attributeType would cause "L=", "O=" and "C=" to fail.
-        private static readonly string attributeType = $@"{oid}|{alpha}(?:{keyChar})*"; // Reordered for greedy Regex
+        private static readonly string attributeType = 
+            $@"{oid}|{alpha}(?:{keyChar})*";                                    // Reordered for greedy Regex
 
         private static readonly string attributeTypeAndValue =
             $@"(?<attributeType>{attributeType})" +
@@ -80,12 +83,13 @@ namespace Rfc2253
 
         public static DistinguishedName Create(string distiguishedName)
         {
-            return new DistinguishedName(distiguishedName);
+            return new DistinguishedName(distiguishedName ?? 
+                throw new ArgumentNullException(nameof(distiguishedName)));
         }
 
 
         /// <summary>
-        /// Parses the given distinguished name as a collection of Relative Distinguished Names.
+        /// Parses the given Distinguished Name as a collection of Relative Distinguished Names.
         /// </summary>
         protected virtual IList<IRelativeDistinguishedName> Parse(string distinguishedName)
         {
@@ -107,9 +111,9 @@ namespace Rfc2253
 
 
         /// <summary>
-        /// Uses the first given regular expression to parses the first Relative Distinguished Name within a
+        /// Uses the first given regular expression to parse the first Relative Distinguished Name within a
         /// Distinguished Name, and the second given regular expression to parse the remaining Relative
-        /// Distinguished Names within the given name-to-parse.
+        /// Distinguished Names within the given <paramref name="nameToParse"/>.
         /// </summary>
         private IList<IRelativeDistinguishedName> Parse(string firstRdnPattern, string remainingRdnsPattern,
             string nameToParse)
@@ -126,14 +130,15 @@ namespace Rfc2253
             var r = new Regex(firstRdnPattern, RegexOptions.Compiled);
             var m = r.Match(nameToParse);
 
-            if (!m.Success) throw new Exception($"A Distinguished Name had an error and could not be parsed.");
+            if (!m.Success) throw new Exception(
+                $"A Distinguished Name ('{nameToParse}') had an error and could not be parsed.");
 
             var rdn = CreateRdnFromRegexMatch(m);
             rdns.Add(rdn);
 
             var parser = new Regex(remainingRdnsPattern, RegexOptions.Compiled);
             ParseMore(parser: parser,
-                remainingSubstringOfDNToParse: nameToParse.Substring(m.Index + m.Length),
+                remainingSubstringOfDNToParse: nameToParse.Substring(startIndex: m.Index + m.Length),
                 rdns: rdns);
 
             return rdns;
@@ -142,7 +147,7 @@ namespace Rfc2253
 
         /// <summary>
         /// Uses the given <see cref="Regex"/> object to parse the given substring, with the resultant matches
-        /// added to the given collection of relative distinguished name objects.
+        /// added to the given collection of Relative Distinguished Name objects.
         /// </summary>
         private void ParseMore(Regex parser, string remainingSubstringOfDNToParse,
             IList<IRelativeDistinguishedName> rdns)
@@ -157,21 +162,20 @@ namespace Rfc2253
 
 
         /// <summary>
-        /// Given a Regex <see cref="Match"/> object from a parsed relative distinguished name, creates and returns
+        /// Given a Regex <see cref="Match"/> object from a parsed Relative Distinguished Name, creates and returns
         /// a <see cref="IRelativeDistinguishedName"/> based on that parsed information.
         /// </summary>
         private IRelativeDistinguishedName CreateRdnFromRegexMatch(Match regexMatchOfRdn)
         {
-            var thisIsAMultiValueRdn = (regexMatchOfRdn.Groups["subComponents"].Success);
-
             IAttributeComponent rdnType;
             IAttributeComponent rdnValue;
 
+            var thisIsAMultiValueRdn = (regexMatchOfRdn.Groups["subComponents"].Success);
             if (thisIsAMultiValueRdn)
             {
                 rdnType = RdnType.Create("MULTIPLE VALUES", isOid: regexMatchOfRdn.Groups["oid"].Success);
 
-                rdnValue = RdnValue.Create(regexMatchOfRdn.Groups["nameComponent"].Value,
+                rdnValue = RdnValue.Create(rdnValue: regexMatchOfRdn.Groups["nameComponent"].Value,
                     multiValues: ParseMultiValueRdn(regexMatchOfRdn.Groups["nameComponent"].Value).ToArray(),
                     isQuoted: regexMatchOfRdn.Groups["quoted"].Success,
                     isHexString: regexMatchOfRdn.Groups["hexString"].Success);
@@ -212,7 +216,8 @@ namespace Rfc2253
 
             try
             {
-                int guessAtMaxStringLength = 50 * Rdns.Length;
+                const int guessAtAverageLengthOfEachRdn = 50;
+                int guessAtMaxStringLength = guessAtAverageLengthOfEachRdn * Rdns.Length;
                 var normalizedString = new StringBuilder(guessAtMaxStringLength);
 
                 foreach (var rdn in Rdns)
@@ -233,16 +238,15 @@ namespace Rfc2253
 
 
         /// <summary>
-        /// Returns <see langword=""="true"/> if both objects, as normalized Distinguished Names, are equal.
-        /// They are not equal if letter casing is different.
+        /// Returns <see langword="true"/> if both objects, as normalized Distinguished Names, are equal.
         /// </summary>
         public static bool operator ==(DistinguishedName obj1, DistinguishedName obj2)
             => (obj1.GetAsNormalized() == obj2.GetAsNormalized());
 
 
         /// <summary>
-        /// Returns <see langword=""="true"/> if both objects, as normalized Distinguished Names, are <i>not</i>
-        /// equal.  They are not equal if letter casing is different.
+        /// Returns <see langword="true"/> if both objects, as normalized Distinguished Names, are <i>not</i>
+        /// equal.
         /// </summary>
         public static bool operator !=(DistinguishedName obj1, DistinguishedName obj2)
             => (obj1.GetAsNormalized() != obj2.GetAsNormalized());
@@ -265,9 +269,14 @@ namespace Rfc2253
         /// Returns the Distinguished Name as a string representation of its current state, which may or may not be
         /// normalized.
         /// </summary>
+        /// <remarks>
+        /// If the internal data structure has already been normalized, <see cref="ToString"/> is more performant
+        /// than <see cref="GetAsNormalized"/>.
+        /// </remarks>
         public override string ToString()
         {
-            var dn = new StringBuilder(capacity: Rdns.Length * 50);
+            const int guessAtAverageLengthOfEachRdn = 50;
+            var dn = new StringBuilder(capacity: Rdns.Length * guessAtAverageLengthOfEachRdn);
             foreach (var rdn in Rdns)
             {
                 dn.Append(rdn.ToString());
