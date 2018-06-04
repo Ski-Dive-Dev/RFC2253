@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 
 namespace Rfc2253
 {
-    public class DistinguishedName
+    public class DistinguishedName : Rfc2253Base, INormalizable
     {
         // Note: RFC 2253 limits characters to the ASCII set (non-ASCII multi-byte characters need to be escaped as
         // hex digits)
@@ -195,22 +195,9 @@ namespace Rfc2253
 
 
         /// <summary>
-        /// Returns the RDN as a normalized string, but does not normalize the internal data structure.
-        /// </summary>
-        public string GetAsNormalized() => GetAsNormalized(convertToNormalized: false);
-
-
-        /// <summary>
-        /// Normalizes the internal data structure of the Distinguished Name.  Subsequent calls to 
-        /// <see cref="ToString"/> will return the normalized string.
-        /// </summary>
-        protected virtual string Normalize() => GetAsNormalized(convertToNormalized: true);
-
-
-        /// <summary>
         /// Gets the Distinguished Name as a normalized string and optionally normalizes the data structure.
         /// </summary>
-        protected virtual string GetAsNormalized(bool convertToNormalized)
+        public override string GetAsNormalized(bool convertToNormalized)
         {
             const char rdnDelimiter = ',';
 
