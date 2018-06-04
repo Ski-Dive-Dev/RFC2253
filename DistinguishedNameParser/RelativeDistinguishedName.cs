@@ -13,8 +13,8 @@ namespace Rfc2253
     /// </remarks>
     public class RelativeDistinguishedName : Rfc2253Base, IRelativeDistinguishedName, INormalizable
     {
-        public IAttributeComponent Type { get; set; }
-        public IAttributeComponent Value { get; set; }
+        public IAttributeComponent Type { get; private set; }
+        public IAttributeComponent Value { get; private set; }
 
         private static readonly Lazy<IRelativeDistinguishedName> lazy =
             new Lazy<IRelativeDistinguishedName>(() => Create());
