@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Rfc2253
 {
@@ -11,6 +9,10 @@ namespace Rfc2253
 
         private RdnType() { /* Disable default constructor for public use. */ }
 
+
+        /// <summary>
+        /// Instantiates and returns an <see cref="RdnType"/> object.
+        /// </summary>
         public static IAttributeComponent Create(string rdnType, bool isOid = false, bool isCaseSensitive = false)
         {
             return new RdnType()
