@@ -19,6 +19,10 @@ namespace Rfc2253
         private static readonly Lazy<IRelativeDistinguishedName> lazy =
             new Lazy<IRelativeDistinguishedName>(() => Create());
 
+
+        /// <summary>
+        /// Gets the default <see cref="RelativeDistinguishedName"/> object with an empty type and value.
+        /// </summary>
         public static IRelativeDistinguishedName Default => lazy.Value;
 
         private RelativeDistinguishedName() { /* Disable default constructor for public use. */ }
@@ -33,6 +37,10 @@ namespace Rfc2253
             };
         }
 
+
+        /// <summary>
+        /// Creates a new <see cref="RelativeDistinguishedName"/> with the given type and value.
+        /// </summary>
         public static IRelativeDistinguishedName Create(IAttributeComponent type, IAttributeComponent value)
         {
             return new RelativeDistinguishedName()
@@ -44,7 +52,8 @@ namespace Rfc2253
 
 
         /// <summary>
-        /// Gets the RDN as a normalized string and optionally normalizes the data structure.
+        /// Gets the Relative Distinguished Name as a normalized string and optionally normalizes the data
+        /// structure.
         /// </summary>
         public override string GetAsNormalized(bool convertToNormalized)
         {
@@ -62,7 +71,7 @@ namespace Rfc2253
                         Value.GetAsNormalized(convertToNormalized);
                 }
 
-                IsNormalized = true;                                        // because all its Type and value are.
+                IsNormalized = true;                                        // because all its Type and Value are.
                 if (normalizedRdnString == "=")
                     return String.Empty;
                 else
