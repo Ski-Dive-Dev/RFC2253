@@ -57,6 +57,8 @@ namespace Rfc2253
         private static readonly string name_Component = $@"{attributeTypeAndValue}" +
             $@"(?<subComponents>(?:[ ]*\+[ ]*{attributeTypeAndValue})+)?";      // Spaces [ ]* only from LDAPv2
 
+        // RFC 1779: 'Semicolon (";") may be used an an alternate separator.  The separators may be mixed, but
+        // this usage is discouraged.'
         private const string rdnDelimiters = @",;";                             // ";" only from LDAPv2
         private static readonly string name = $@"(?<nameComponent>{name_Component})";
         private static readonly string nextName =
@@ -66,7 +68,8 @@ namespace Rfc2253
         private static readonly string nextSubNameAndType =
             $@"[ ]*\+[ ]*{attributeTypeAndValue}";                              // Spaces [ ]* only from LDAPv2
 
-        // *Note: RFC 2253 specifically calls for space (' ' ASCII 32) characters, not just any whitespace char.
+        // *Note: RFC 2253 specifically calls for space (' ' ASCII 32) characters, not just any whitespace char,
+        // but RFC 1779 defines ( <CR> ) *( " " ) as <optional-space>.
 
         #endregion
 
