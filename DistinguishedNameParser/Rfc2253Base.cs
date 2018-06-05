@@ -12,20 +12,20 @@ namespace Rfc2253
         public bool IsNormalized { get; protected set; }
 
         /// <summary>
-        /// Returns the RDN as a normalized string, but does not normalize the internal data structure.
+        /// Returns the object as a normalized string, but does not normalize the internal data structure.
         /// </summary>
         public virtual string GetAsNormalized() => GetAsNormalized(convertToNormalized: false);
 
 
         /// <summary>
-        /// Normalizes the internal data structure of the RDN.  Subsequent calls to <see cref="ToString"/> will
+        /// Normalizes the internal data structure of the object.  Subsequent calls to <see cref="ToString"/> will
         /// return the normalized string.
         /// </summary>
         public virtual void Normalize() => GetAsNormalized(convertToNormalized: true);
 
 
         /// <summary>
-        /// Gets the RDN as a normalized string and optionally normalizes the data structure.
+        /// Gets the object as a normalized string and optionally normalizes the data structure.
         /// </summary>
         public abstract string GetAsNormalized(bool convertToNormalized);
 
