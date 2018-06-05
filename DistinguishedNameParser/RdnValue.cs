@@ -185,7 +185,11 @@ namespace Rfc2253
         /// </summary>
         protected virtual string NormalizeEscapedChars(string stringToNormalize)
         {
-            const string rfc2253EscapedHexDigitsRegexPattern = @"\\[0-9A-Fa-f]{2}";
+            const string rfc2253EscapedHexDigitsRegexPattern =
+                @"\\[A-Fa-f013-9][A-Fa-f0-9]" +         // No patterns \20 - \2F, but all other hex pairs.
+                @"|\\2[A-Fa-f1-9]" +                    // Only \21 - \2F (no \20) -- no escaped spaces.
+                @"|(?<!^)\\20(?<!$)";                   // No ^\20 or \20$ -- \20, except leading or trailing \20.
+
             var r = new Regex(rfc2253EscapedHexDigitsRegexPattern, RegexOptions.Compiled);
 
             var collectionOfEscapedHexPairs = r.Matches(stringToNormalize);
