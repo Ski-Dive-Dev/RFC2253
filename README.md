@@ -4,7 +4,24 @@ A .NET Core 2.0 solution to parse LDAP (or X.509) Distinguished Names and option
 
 Closely follows RFC 2253 (https://www.ietf.org/rfc/rfc2253.txt) for parsing.  Parses both LDAPv2 and LDAPv3, but normalizes output for LDAPv3.
 
-Uses Regular Expressions for parsing, which uses results in more concise code than parsing loops.
+Written in C# v. 7, uses Regular Expressions for parsing, which results in more concise code than parsing loops.
+
+Supply a Distinguished Name to be parsed to the
+```csharp
+public static DistinguishedName Create(string distiguishedName)
+```
+method, and then call the
+```csharp
+ public virtual void Normalize() => GetAsNormalized(convertToNormalized: true);
+```
+to normalize the Distinguished Name within the object's internal data structure.
+Do the same for another Distinguished Name.
+To compare the two Distinguished Names for equivalency, compare the `DistinguishedName.ToString()` results to one another.
+
+In a future version, the ordering of RDNs can be ignored for comparisons, and OIDs will be substituted by their Attribute Names.
+
+Also, Regex patterns will be minified and use of the Singleton pattern will be considered as a means to cache compiled Regex objects.
+
 
 Sample NUnit Test Cases:
 ```csharp
