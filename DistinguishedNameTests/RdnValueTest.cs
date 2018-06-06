@@ -44,9 +44,9 @@ namespace DistinguishedNameTests
         [TestCase("\"Boys, girls + adults deserve fudge.\"", ExpectedResult = "Boys\\, girls \\+ adults deserve fudge.")]
         [TestCase("\"Don't expect to fix \\3cthis\\3e; but this.\"",
             ExpectedResult = "Don't expect to fix \\3cthis\\3e\\; but this.")]
-        [TestCase("\"  Leading Spaces\"", ExpectedResult = "\\20\\20Leading Spaces")]
-        [TestCase("\"Trailing Spaces  \"", ExpectedResult = "Trailing Spaces\\20\\20")]
-        [TestCase("\"  Leading and Trailing Spaces  \"", ExpectedResult = "\\20\\20Leading and Trailing Spaces\\20\\20")]
+        [TestCase("\"  Leading Spaces\"", ExpectedResult = "\\20 Leading Spaces")]
+        [TestCase("\"Trailing Spaces  \"", ExpectedResult = "Trailing Spaces \\20")]
+        [TestCase("\"  Leading and Trailing Spaces  \"", ExpectedResult = "\\20 Leading and Trailing Spaces \\20")]
         [TestCase("\"Only opening quote", ExpectedResult = "\"Only opening quote")]
         [TestCase("Only closing quote\"", ExpectedResult = "Only closing quote\"")]
         [TestCase("", ExpectedResult = "")]

@@ -136,8 +136,8 @@ namespace Rfc2253
 
         /// <summary>
         /// Removes enclosing quote marks from the given string and escapes RFC2253 "special" characters.  It
-        /// escapes spaces immediately following the opening quote and immediately preceding the closing quote.
-        /// Does not perform any other normalization.
+        /// escapes the first space immediately following the opening quote and the last space immediately
+        /// preceding the closing quote.  Does not perform any other normalization.
         /// </summary>
         protected virtual string Unquote(string quotedString)
         {
@@ -152,12 +152,10 @@ namespace Rfc2253
             const string charsThatMustBeEscaped = special;
             const int positionPastFirstQuoteChar = 1;
             const int lengthOfTwoQuoteChars = 2;
-            var firstNonSpaceCharPastOpeningQuoteFound = false;
             for (var i = positionPastFirstQuoteChar; i <= quotedString.Length - lengthOfTwoQuoteChars; i++)
             {
                 var thisChar = quotedString.Substring(i, 1);
-                if (firstNonSpaceCharPastOpeningQuoteFound
-                    || (firstNonSpaceCharPastOpeningQuoteFound = thisChar !=" "))
+                if (i > positionPastFirstQuoteChar || thisChar != " ")
                 {
                     escapedAndUnquoted.Append(charsThatMustBeEscaped.Contains(thisChar)
                         ? "\\" + thisChar
@@ -169,12 +167,14 @@ namespace Rfc2253
                 }
             }
 
-            var lengthWithTrailingSpaces = escapedAndUnquoted.Length;
-            var trimmedEscapedAndUnquotedString = escapedAndUnquoted.ToString().TrimEnd();
-            var numTrailingSpaces = lengthWithTrailingSpaces - trimmedEscapedAndUnquotedString.Length;
-            var escapedSpaces = String.Concat(Enumerable.Repeat(escapedHexCodeForSpace, numTrailingSpaces));
+            var lastCharPositionInString = escapedAndUnquoted.Length - 1;
+            if (lastCharPositionInString >= 0 && escapedAndUnquoted[lastCharPositionInString] == ' ')
+            {
+                escapedAndUnquoted[lastCharPositionInString] = '\\';
+                escapedAndUnquoted.Append("20");
+            }
 
-            return trimmedEscapedAndUnquotedString + escapedSpaces;
+            return escapedAndUnquoted.ToString();
         }
 
 
@@ -249,7 +249,7 @@ namespace Rfc2253
         /// Returns <see langword="true"/> if the given ASCII value represents one of the seven "special"
         /// characters defined in RFC 2253.
         /// </summary>
-        protected virtual bool IsRfc2253SpecialChar(byte asciiValue) => 
+        protected virtual bool IsRfc2253SpecialChar(byte asciiValue) =>
             asciiCodesForSpecialChars.Contains(asciiValue);
 
 
