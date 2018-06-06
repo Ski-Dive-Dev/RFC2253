@@ -1,5 +1,5 @@
 ﻿using NUnit.Framework;
-using Rfc2253;
+using SkiDiveCode.Ldap.Rfc2253;
 
 namespace DistinguishedNameTests
 {

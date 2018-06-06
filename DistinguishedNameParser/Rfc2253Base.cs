@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace Rfc2253
+namespace SkiDiveCode.Ldap.Rfc2253
 {
     public abstract class Rfc2253Base : INormalizable
     {

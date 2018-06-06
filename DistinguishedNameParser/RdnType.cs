@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Rfc2253
+namespace SkiDiveCode.Ldap.Rfc2253
 {
     public class RdnType : Rfc2253Base, IAttributeComponent, INormalizable
     {

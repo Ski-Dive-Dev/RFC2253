@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 
-namespace Rfc2253
+namespace SkiDiveCode.Ldap.Rfc2253
 {
     public class Rfc2253Section3
     {

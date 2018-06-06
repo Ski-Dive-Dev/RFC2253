@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Rfc2253
+namespace SkiDiveCode.Ldap.Rfc2253
 {
     /// <summary>
     /// An RFC 2253 Relative Distinguished Name, with an Attribute Type (<see cref="Type"/>) and Attribute Value

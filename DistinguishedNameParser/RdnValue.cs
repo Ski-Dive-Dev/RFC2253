@@ -3,7 +3,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace Rfc2253
+namespace SkiDiveCode.Ldap.Rfc2253
 {
     public class RdnValue : Rfc2253Base, IAttributeComponent, INormalizable
     {
