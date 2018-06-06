@@ -6,7 +6,7 @@ Closely follows RFC 2253 (https://www.ietf.org/rfc/rfc2253.txt) for parsing.  Pa
 
 Written in C# v. 7, uses Regular Expressions for parsing, which results in more concise code than parsing loops.
 
-__Instructutions for Use__
+__Instructions for Use__
 1. Supply a Distinguished Name to be parsed to the `DistinguishedName.Create(string distinguishedName)` method
 2. Call the `Normalized()` method on the returned object to normalize the internal structures to be strictly compliant to RFC 2253
 3. Do the same two calls for another Distinguished Name
