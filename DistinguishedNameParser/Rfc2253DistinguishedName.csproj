@@ -11,6 +11,8 @@
     <Copyright>2018, Eric S. Li</Copyright>
     <PackageReleaseNotes>Released under the MIT License.</PackageReleaseNotes>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <AssemblyVersion>1.0.0.1</AssemblyVersion>
+    <FileVersion>1.0.0.1</FileVersion>
   </PropertyGroup>
 
 </Project>

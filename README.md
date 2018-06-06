@@ -1,29 +1,20 @@
 # RFC 2253 Distinguished Name Parser
 
-A .NET Core 2.0 solution to parse LDAP (or X.509) Distinguished Names and optionally normalize them so that two Distinguished Names can be compared to one another for equivalency.
+A .NET Core 2.0 solution to parse LDAP (or X.509) Distinguished Names and optionally normalize them so that two (or more) Distinguished Names can be compared to one another for equivalency.
 
 Closely follows RFC 2253 (https://www.ietf.org/rfc/rfc2253.txt) for parsing.  Parses both LDAPv2 and LDAPv3, but normalizes output for LDAPv3.
 
 Written in C# v. 7, uses Regular Expressions for parsing, which results in more concise code than parsing loops.
 
-Supply a Distinguished Name to be parsed to the
-```csharp
-public static DistinguishedName Create(string distiguishedName)
-```
-method, and then call the
-```csharp
- public virtual void Normalize() => GetAsNormalized(convertToNormalized: true);
-```
-to normalize the Distinguished Name within the object's internal data structure.
-Do the same for another Distinguished Name.
-To compare the two Distinguished Names for equivalency, compare the `DistinguishedName.ToString()` results to one another.
+__Instructions for Use__
+1. Supply a Distinguished Name to be parsed to the `DistinguishedName.Create(string distinguishedName)` method
+2. Call the `Normalized()` method on the returned object to normalize the internal structures to be strictly compliant to RFC 2253
+3. Do the same two calls for another Distinguished Name
+4. To compare the two Distinguished Names for equivalency, compare the `DistinguishedName` objects' `ToString()` results to one another
 
-In a future version, the ordering of RDNs can be ignored for comparisons, and OIDs will be substituted by their Attribute Names.
+Currently, RDNs must be in the same order in both Distinguished Names being compared, and OIDs do not match against Attribute Names -- these features will be added in a future version.
 
-Also, Regex patterns will be minified and use of the Singleton pattern will be considered as a means to cache compiled Regex objects.
-
-
-Sample NUnit Test Cases:
+__Sample NUnit Test Cases__
 ```csharp
 [TestCase(@"CN=Steve Kille,O=Isode Limited,C=GB", 
     ExpectedResult = @"cn=Steve Kille,o=Isode Limited,c=GB")]
@@ -57,9 +48,9 @@ Sample NUnit Test Cases:
 [TestCase("\"Boys, girls + adults deserve fudge.\"", ExpectedResult = "Boys\\, girls \\+ adults deserve fudge.")]
 [TestCase("\"Don't expect to fix \\3cthis\\3e; but this.\"",
     ExpectedResult = "Don't expect to fix \\3cthis\\3e\\; but this.")]
-[TestCase("\"  Leading Spaces\"", ExpectedResult = "\\20\\20Leading Spaces")]
-[TestCase("\"Trailing Spaces  \"", ExpectedResult = "Trailing Spaces\\20\\20")]
-[TestCase("\"  Leading and Trailing Spaces  \"", ExpectedResult = "\\20\\20Leading and Trailing Spaces\\20\\20")]
+[TestCase("\"  Leading Spaces\"", ExpectedResult = "\\20 Leading Spaces")]
+[TestCase("\"Trailing Spaces  \"", ExpectedResult = "Trailing Spaces \\20")]
+[TestCase("\"  Leading and Trailing Spaces  \"", ExpectedResult = "\\20 Leading and Trailing Spaces \\20")]
 [TestCase("\"Only opening quote", ExpectedResult = "\"Only opening quote")]
 [TestCase("Only closing quote\"", ExpectedResult = "Only closing quote\"")]
 ```
