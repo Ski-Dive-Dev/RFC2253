@@ -10,6 +10,7 @@
     <Description>Accepts and parses strings in the format of an RFC 2253 Distinguished Name, and optionally normalizes them for direct comparison of equivalency.</Description>
     <Copyright>2018, Eric S. Li</Copyright>
     <PackageReleaseNotes>Released under the MIT License.</PackageReleaseNotes>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
 </Project>
