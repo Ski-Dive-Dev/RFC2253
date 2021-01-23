@@ -1,8 +1,10 @@
 # RFC 2253 Distinguished Name Parser
 
-A .NET Core 2.0 solution to parse LDAP (or X.509) Distinguished Names and optionally normalize them so that two (or more) Distinguished Names can be compared to one another for equivalency.
+Note: This project was originally released targeting .NET Core 2.0.  RFC 2253 Distinguished Name Parser Version 1.1.0 now targets .NET Standard 1.3 to make it compatible with a larger number of projects.  Refer to [.NET Standard](https://docs.microsoft.com/en-us/dotnet/standard/net-standard) for more details.
 
-Closely follows RFC 2253 (https://www.ietf.org/rfc/rfc2253.txt) for parsing.  Parses both LDAPv2 and LDAPv3, but normalizes output for LDAPv3.
+This project is a .NET Standard solution to parse LDAP (or X.509) Distinguished Names and optionally normalize them so that two (or more) Distinguished Names can be compared to one another for equivalency.
+
+Closely follows [RFC 2253](https://www.ietf.org/rfc/rfc2253.txt) for parsing.  Parses both LDAPv2 and LDAPv3, but normalizes output for LDAPv3.
 
 Written in C# v. 7, uses Regular Expressions for parsing, which results in more concise code than parsing loops.
 
@@ -12,7 +14,11 @@ __Instructions for Use__
 3. Do the same two calls for another Distinguished Name
 4. To compare the two Distinguished Names for equivalency, compare the `DistinguishedName` objects' `ToString()` results to one another
 
-Currently, RDNs must be in the same order in both Distinguished Names being compared, and OIDs do not match against Attribute Names -- these features will be added in a future version.
+Currently, RDNs must be in the same order in both Distinguished Names being compared, and OIDs do not match against Attribute Names -- these features may be added in a future version.
+
+Version 1.1.0 fixes a bug in the `ToString()` method (commas were missing), which may be a breaking change for some implementers.
+
+Version 1.1.0 also fixes another bug in the `ToString()` method with regards to multi-valued attibutes, and now also sorts multi-valued attributes so that two distinguished names will now match if they have the same, but dis-ordered multi-valued attributes.
 
 __Sample NUnit Test Cases__
 ```csharp

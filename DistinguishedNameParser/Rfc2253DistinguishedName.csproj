@@ -1,19 +1,19 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <TargetFramework>netstandard1.3</TargetFramework>
     <AssemblyName>SkiDiveCode.Ldap.Rfc2253</AssemblyName>
     <RootNamespace>SkiDiveCode.Ldap.Rfc2253</RootNamespace>
     <Authors>Eric S. Li</Authors>
     <Company></Company>
     <Product>RFC 2253 Distinguished Name Parser and Normalizer</Product>
     <Description>Accepts and parses strings in the format of an RFC 2253 Distinguished Name, and optionally normalizes them for direct comparison of equivalency.</Description>
-    <Copyright>2018, Eric S. Li</Copyright>
+    <Copyright>2018, 2021 Eric S. Li</Copyright>
     <PackageReleaseNotes>Released under the MIT License.</PackageReleaseNotes>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <AssemblyVersion>1.0.1.1</AssemblyVersion>
-    <FileVersion>1.0.1.1</FileVersion>
-    <Version>1.0.1</Version>
+    <AssemblyVersion>1.1.0.0</AssemblyVersion>
+    <FileVersion>1.1.0.0</FileVersion>
+    <Version>1.1.0</Version>
   </PropertyGroup>
 
 </Project>
