@@ -265,13 +265,18 @@ namespace SkiDiveCode.Ldap.Rfc2253
         /// </remarks>
         public override string ToString()
         {
+            const char rdnDelimiter = ',';
             const int guessAtAverageLengthOfEachRdn = 50;
+
             var dn = new StringBuilder(capacity: Rdns.Length * guessAtAverageLengthOfEachRdn);
             foreach (var rdn in Rdns)
             {
+                dn.Append(rdnDelimiter);
                 dn.Append(rdn.ToString());
             }
-            return dn.ToString();
+         
+            const int positionPastFirstDelimiter = 1;
+            return dn.ToString().Substring(positionPastFirstDelimiter);
         }
     }
 }
