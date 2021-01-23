@@ -11,7 +11,7 @@ namespace SkiDiveCode.Ldap.Rfc2253
     /// Value (for troubleshooting purposes), which may cause inadvertent leakage of information if those
     /// exceptions are not caught.
     /// </remarks>
-    public class RelativeDistinguishedName : Rfc2253Base, IRelativeDistinguishedName, INormalizable
+    public class RelativeDistinguishedName : Rfc2253Base, IRelativeDistinguishedName, INormalizable, IComparable
     {
         public IAttributeComponent Type { get; private set; }
         public IAttributeComponent Value { get; private set; }
@@ -67,7 +67,7 @@ namespace SkiDiveCode.Ldap.Rfc2253
                 }
                 else
                 {
-                    normalizedRdnString = Type.GetAsNormalized(convertToNormalized) + "=" + 
+                    normalizedRdnString = Type.GetAsNormalized(convertToNormalized) + "=" +
                         Value.GetAsNormalized(convertToNormalized);
                 }
 
@@ -100,6 +100,31 @@ namespace SkiDiveCode.Ldap.Rfc2253
                     return Value.ToString();
                 default:
                     return Type + "=" + Value;
+            }
+        }
+
+        public int CompareTo(object obj)
+        {
+            if (obj == null)
+            {
+                const int givenObjectPrecedesInSortOrder = 1;
+                return givenObjectPrecedesInSortOrder;
+            }
+
+
+            var compareObject = obj as RelativeDistinguishedName;
+            if (compareObject == null)
+            {
+                throw new ArgumentException($"Object is not a {nameof(RelativeDistinguishedName)}.");
+            }
+
+            if (Type.Equals(compareObject))
+            {
+                return String.Compare(Value.ToString(), compareObject.Value.ToString());
+            }
+            else
+            {
+                return String.Compare(Type.ToString(), compareObject.Type.ToString());
             }
         }
     }

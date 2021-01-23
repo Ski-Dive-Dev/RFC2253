@@ -9,7 +9,9 @@ namespace Rfc2253DistinguishedNameTests
         [TestCase(@"CN=Steve Kille,O=Isode Limited,C=GB",
             ExpectedResult = @"cn=Steve Kille,o=Isode Limited,c=GB")]
         [TestCase(@"OU=Sales+CN=J. Smith,O=Widget Inc.,C=US",
-            ExpectedResult = @"ou=Sales+cn=J. Smith,o=Widget Inc.,c=US")]
+            ExpectedResult = @"cn=J. Smith+ou=Sales,o=Widget Inc.,c=US")]
+        [TestCase(@"CN=J. Smith+OU=Sales,O=Widget Inc.,C=US",
+            ExpectedResult = @"cn=J. Smith+ou=Sales,o=Widget Inc.,c=US")]
         [TestCase(@"CN=L. Eagle,O=Sue\, Grabbit and Runn,C=GB",
             ExpectedResult = @"cn=L. Eagle,o=Sue\, Grabbit and Runn,c=GB")]
         [TestCase(@"CN =Before\0DAfter,O= Test,C  =  GB", ExpectedResult = @"cn=Before\0DAfter,o=Test,c=GB")]
@@ -35,7 +37,9 @@ namespace Rfc2253DistinguishedNameTests
         [TestCase(@"CN=Steve Kille,O=Isode Limited,C=GB",
             ExpectedResult = @"cn=Steve Kille,o=Isode Limited,c=GB")]
         [TestCase(@"OU=Sales+CN=J. Smith,O=Widget Inc.,C=US",
-            ExpectedResult = @"ou=Sales+cn=J. Smith,o=Widget Inc.,c=US")]
+            ExpectedResult = @"cn=J. Smith+ou=Sales,o=Widget Inc.,c=US")]
+        [TestCase(@"CN=J. Smith+OU=Sales,O=Widget Inc.,C=US",
+            ExpectedResult = @"cn=J. Smith+ou=Sales,o=Widget Inc.,c=US")]
         [TestCase(@"CN=L. Eagle,O=Sue\, Grabbit and Runn,C=GB",
             ExpectedResult = @"cn=L. Eagle,o=Sue\, Grabbit and Runn,c=GB")]
         [TestCase(@"CN =Before\0DAfter,O= Test,C  =  GB", ExpectedResult = @"cn=Before\0DAfter,o=Test,c=GB")]

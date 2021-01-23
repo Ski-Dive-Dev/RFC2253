@@ -55,6 +55,18 @@ namespace SkiDiveCode.Ldap.Rfc2253
         {
             try
             {
+                RelativeDistinguishedName[] shallowCopyOfValues = null;
+                if (!convertToNormalized)
+                {
+                    shallowCopyOfValues = new RelativeDistinguishedName[MultiValues.Length];
+                    Array.Copy(
+                        sourceArray: MultiValues,
+                        destinationArray: shallowCopyOfValues,
+                        length: MultiValues.Length);
+                }
+
+                Array.Sort(MultiValues);
+
                 var normalizedString = new StringBuilder();
                 const char rdnComponentDelimiter = '+';
                 foreach (var rdn in MultiValues)
@@ -71,6 +83,10 @@ namespace SkiDiveCode.Ldap.Rfc2253
                 {
                     Value = normalizedString.ToString();
                     IsNormalized = true;
+                }
+                else
+                {
+                    MultiValues = shallowCopyOfValues;
                 }
                 return normalizedString.ToString();
             }
