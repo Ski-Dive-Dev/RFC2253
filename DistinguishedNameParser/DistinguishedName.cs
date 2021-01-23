@@ -176,7 +176,7 @@ namespace SkiDiveCode.Ldap.Rfc2253
             var thisIsAMultiValueRdn = (regexMatchOfRdn.Groups["subComponents"].Success);
             if (thisIsAMultiValueRdn)
             {
-                rdnType = RdnType.Create("MULTIPLE VALUES", isOid: regexMatchOfRdn.Groups["oid"].Success);
+                rdnType = RdnType.Create(multipleValuesPrefix, isOid: regexMatchOfRdn.Groups["oid"].Success);
 
                 rdnValue = RdnValue.Create(rdnValue: regexMatchOfRdn.Groups["nameComponent"].Value,
                     multiValues: ParseMultiValueRdn(regexMatchOfRdn.Groups["nameComponent"].Value).ToArray(),

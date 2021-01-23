@@ -7,6 +7,8 @@ namespace SkiDiveCode.Ldap.Rfc2253
 {
     public abstract class Rfc2253Base : INormalizable
     {
+        protected const string multipleValuesPrefix = "MULTIPLE VALUES";
+
         public virtual bool IsCaseSensitive { get; protected set; }
 
         public bool IsNormalized { get; protected set; }

@@ -90,6 +90,17 @@ namespace SkiDiveCode.Ldap.Rfc2253
         /// Returns the Relative Distinguished Name as a string representation of its current state, which may or
         /// may not be normalized.
         /// </summary>
-        public override string ToString() => Type + "=" + Value;
+        public override string ToString()
+        {
+            switch (Type.Value)
+            {
+                case "":
+                    return String.Empty;
+                case multipleValuesPrefix:
+                    return Value.ToString();
+                default:
+                    return Type + "=" + Value;
+            }
+        }
     }
 }
