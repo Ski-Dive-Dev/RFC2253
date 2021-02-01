@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿
+using NUnit.Framework;
 using SkiDiveCode.Ldap.Rfc2253;
 
 namespace Rfc2253DistinguishedNameTests
@@ -26,6 +27,8 @@ namespace Rfc2253DistinguishedNameTests
         [TestCase(@"CN=", ExpectedResult = @"cn=")]
         [TestCase(@"CN=,sn=Smith", ExpectedResult = @"cn=,sn=Smith")]
         [TestCase(@"", ExpectedResult = @"")]
+        [TestCase(@"CN=Trailing Space\ ,O=Isode Limited,C=GB",
+            ExpectedResult = @"cn=Trailing Space\ ,o=Isode Limited,c=GB")]
         public string ShouldParseSimpleDN(string distinguishedName)
         {
             var dn = DistinguishedName.Create(distinguishedName);
@@ -53,6 +56,8 @@ namespace Rfc2253DistinguishedNameTests
             ExpectedResult = @"cn=Quoted Last\, Quoted First,o=Space After Comma,c=Semi's too!")]
         [TestCase(@"CN=", ExpectedResult = @"cn=")]
         [TestCase(@"CN=,sn=Smith", ExpectedResult = @"cn=,sn=Smith")]
+        [TestCase(@"CN=Trailing Space\ ,O=Isode Limited,C=GB",
+            ExpectedResult = @"cn=Trailing Space\ ,o=Isode Limited,c=GB")]
         public string ShouldReturnNormalizedToString(string distinguishedName)
         {
             var dn = DistinguishedName.Create(distinguishedName);

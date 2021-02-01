@@ -36,7 +36,7 @@ namespace SkiDiveCode.Ldap.Rfc2253
         private static readonly string stringRegexPattern =
             $@"(?<hexString>{octothorpe}{hexString})" +
             $@"|{quotation}(?<quoted>(?:{quoteChar}|{pair})*){quotation}" +     // Quoted only from LDAPv2
-            $@"|(?:{stringChar}|{pair})*";
+            $@"|(?:{stringChar}|{backslash}({hexPair}|.))*";       // {pair} replaced with {backslash}({hexPair}|.)
 
         private static readonly string attributeValue = stringRegexPattern;
         private static readonly string oid =
@@ -188,7 +188,14 @@ namespace SkiDiveCode.Ldap.Rfc2253
                 rdnType = RdnType.Create(regexMatchOfRdn.Groups["attributeType"].Value.Trim(),
                     isOid: regexMatchOfRdn.Groups["oid"].Success);
 
-                rdnValue = RdnValue.Create(regexMatchOfRdn.Groups["attributeValue"].Value.Trim(),
+                var attributeValue = regexMatchOfRdn.Groups["attributeValue"].Value;
+                const string escapedSpaced = @"\ ";
+                if (!attributeValue.EndsWith(escapedSpaced))
+                {
+                    attributeValue = attributeValue.Trim();
+                }
+
+                rdnValue = RdnValue.Create(attributeValue,
                     isQuoted: regexMatchOfRdn.Groups["quoted"].Success,
                     isHexString: regexMatchOfRdn.Groups["hexString"].Success);
             }
