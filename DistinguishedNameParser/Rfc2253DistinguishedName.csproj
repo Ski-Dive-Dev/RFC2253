@@ -24,13 +24,15 @@ Instructions for Use
 This project was originally released targeting .NET Core 2.0.
 RFC 2253 Distinguished Name Parser Version 1.1.0 now targets .NET Standard 1.3 to make it compatible with a larger number of projects.  Refer to https://docs.microsoft.com/en-us/dotnet/standard/net-standard for more details.
 
+Version 1.1.2 fixes a bug that dropped a trailing space in an attribute value that was properly escaped.
+
 Version 1.1.0 fixes a bug in the `ToString()` method (commas were missing), which may be a breaking change for some implementors.
 
 Version 1.1.0 also fixes another bug in the `ToString()` method with regards to multi-valued attibutes, and now also sorts multi-valued attributes so that two distinguished names will now match if they have the same, but dis-ordered multi-valued attributes.</PackageReleaseNotes>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <AssemblyVersion>1.1.1.0</AssemblyVersion>
-    <FileVersion>1.1.1.0</FileVersion>
-    <Version>1.1.1</Version>
+    <AssemblyVersion>1.1.2.0</AssemblyVersion>
+    <FileVersion>1.1.2.0</FileVersion>
+    <Version>1.1.2</Version>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageId>Rfc2253</PackageId>
     <RepositoryUrl>https://github.com/Ski-Dive-Dev/RFC2253</RepositoryUrl>
